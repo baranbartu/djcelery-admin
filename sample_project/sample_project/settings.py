@@ -19,7 +19,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'celery',
+    'djcelery',
     'celeryadmin',
+    'celeryapp',
 )
 
 MIDDLEWARE_CLASSES = (
