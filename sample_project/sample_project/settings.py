@@ -17,8 +17,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'celeryadmin',
-    'app'
+    'app',
+    'celeryadmin'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -32,7 +32,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'example.urls'
+ROOT_URLCONF = 'sample_project.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +50,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'example.wsgi.application'
+WSGI_APPLICATION = 'sample_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'example.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'celery-admin-example',
+        'NAME': 'djcelery-admin-example',
     }
 }
 
