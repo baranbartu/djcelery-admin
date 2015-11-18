@@ -9,5 +9,6 @@ setup(
     author='Baran Bartu Demirci',
     author_email='bbartu.demirci@gmail.com',
     description='Celery task monitoring and management on custom admin page',
+    include_package_data=True,
     install_requires=['django', 'celery', 'django-celery']
 )
