@@ -14,5 +14,5 @@ class ContextBasedTemplateView(TemplateView):
 
 
 def get_dashboard_context():
-    from context import Context
-    return Context().dashboard
+    from contextmanager import ContextManager
+    return ContextManager().dashboard

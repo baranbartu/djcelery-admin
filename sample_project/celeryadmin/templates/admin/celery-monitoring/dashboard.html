@@ -1,0 +1,65 @@
+{% extends 'admin/base_site.html' %}
+{% block title %}Celery Monitoring Page{% endblock %}
+{% block content %}
+    <div class='module'>
+        <table summary='Celery Workers'>
+            <thead>
+            <tr>
+                <th>
+                    Worker
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for worker in dashboard.workers %}
+                <tr>
+                    <td>
+                        {{ worker.id }}
+                    </td>
+                    <td>
+                        {{ worker.up }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class='module'>
+        <table summary='Celery Registered Tasks'>
+            <thead>
+            <tr>
+                <th>
+                    Task
+                </th>
+                <th>
+                    Workers
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task, workers in dashboard.registered_tasks.items %}
+                <tr>
+                    <td>
+                        {{ task }}
+                    </td>
+                    <td>
+                        <ul>
+                            {% for worker in workers %}
+                                <li>
+                                    {{ worker }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

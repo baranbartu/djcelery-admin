@@ -37,3 +37,20 @@ class CeleryClient(object):
                 workers.append(worker)
 
         return workers
+
+    def registered_tasks(self):
+        """
+        get registered task list
+        :return:
+        """
+        response = self.control.inspect().registered()
+        registered_tasks = {}
+        for worker, tasks in response.iteritems():
+            for task in tasks:
+                if task in registered_tasks:
+                    exists = registered_tasks[task]
+                    registered_tasks[task] = list(set(exists.append(worker)))
+                else:
+                    registered_tasks[task] = [worker]
+
+        return registered_tasks
