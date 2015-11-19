@@ -9,8 +9,7 @@ class ContextBasedTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ContextBasedTemplateView, self).get_context_data(
             **kwargs)
-        context.update(self.context or {})
-        context.update({'extra_content': get_dashboard_context()})
+        context['dashboard'] = get_dashboard_context()
         return context
 
 

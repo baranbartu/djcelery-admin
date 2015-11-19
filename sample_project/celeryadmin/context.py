@@ -12,8 +12,7 @@ class Context(object):
 
     @property
     def dashboard(self):
-        workers = self.workers()
-        self._dashboard.setdefault('workers', workers)
+        self._dashboard['workers'] = self.workers()
         return self._dashboard
 
     def workers(self):
