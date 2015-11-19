@@ -85,3 +85,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+CELERY_APPLICATION_PATH = 'sample_project.celery.app'
