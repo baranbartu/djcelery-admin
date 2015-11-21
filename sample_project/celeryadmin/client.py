@@ -18,24 +18,35 @@ class CeleryClient(object):
         self.control = Control(self.application)
 
     def workers(self):
+        response = self.control.inspect().stats()
+        statuses = self.worker_statuses()
+        workers = []
+        for name, info in response.iteritems():
+            worker = dict()
+            worker['name'] = name
+            worker['status'] = statuses[worker['name']]
+            worker['concurrency'] = info['pool']['max-concurrency']
+            worker['broker'] = {'transport': info['broker']['transport'],
+                                'hostname': info['broker']['hostname'],
+                                'port': info['broker']['port']}
+            workers.append(worker)
+        return workers
+
+    def worker_statuses(self):
         """
         get worker statuses
         :return:
         """
         response = self.control.ping()
-        workers = []
+        workers = {}
         for w in response:
-            worker = {}
             for k, v in w.iteritems():
-                worker['id'] = k
                 for k_inner, v_inner in v.iteritems():
                     if k_inner == 'ok' and v_inner == 'pong':
-                        worker['up'] = True
+                        workers[k] = 'Active'
                     else:
-                        worker['up'] = False
+                        workers[k] = 'Passive'
                     break
-                workers.append(worker)
-
         return workers
 
     def registered_tasks(self):
@@ -49,7 +60,8 @@ class CeleryClient(object):
             for task in tasks:
                 if task in registered_tasks:
                     exists = registered_tasks[task]
-                    registered_tasks[task] = list(set(exists.append(worker)))
+                    exists.append(worker)
+                    registered_tasks[task] = list(set(exists))
                 else:
                     registered_tasks[task] = [worker]
 

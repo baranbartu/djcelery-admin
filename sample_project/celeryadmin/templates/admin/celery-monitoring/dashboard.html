@@ -11,16 +11,40 @@
                 <th>
                     Status
                 </th>
+                <th>
+                    Concurrency
+                </th>
+                <th>
+                    Broker Transport
+                </th>
+                <th>
+                    Broker Hostname
+                </th>
+                <th>
+                    Broker Port
+                </th>
             </tr>
             </thead>
             <tbody>
             {% for worker in dashboard.workers %}
                 <tr>
                     <td>
-                        {{ worker.id }}
+                        {{ worker.name }}
                     </td>
                     <td>
-                        {{ worker.up }}
+                        {{ worker.status }}
+                    </td>
+                    <td>
+                        {{ worker.concurrency }}
+                    </td>
+                    <td>
+                        {{ worker.broker.transport }}
+                    </td>
+                    <td>
+                        {{ worker.broker.hostname }}
+                    </td>
+                    <td>
+                        {{ worker.broker.port }}
                     </td>
                 </tr>
             {% endfor %}
@@ -39,6 +63,9 @@
                 <th>
                     Workers
                 </th>
+                <th>
+                    Operation
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -56,6 +83,9 @@
                             {% endfor %}
                         </ul>
                     </td>
+                <td>
+                    <input type="submit" value="Execute" onclick="executeTaskAsync('{{ task }}')">
+                </td>
                 </tr>
             {% endfor %}
             </tbody>
