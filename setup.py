@@ -17,5 +17,5 @@ setup(
     package_data={'celeryadmin': ['templates/celery-monitoring.html']},
     include_package_data=True,
     url='http://github.com/baranbartu/djcelery-admin',
-    install_requires=['django>=1.6', 'celery', 'django-celery', 'redis']
+    install_requires=['django>=1.6', 'celery', 'django-celery']
 )
