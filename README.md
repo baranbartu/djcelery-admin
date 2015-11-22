@@ -1,4 +1,4 @@
-# djcelery-admin (Still development)
+# djcelery-admin
 
 Celery task monitoring and management on custom admin page. You don't need any third party application, async process like celery-flower or any extra connection to your broker. 
 
