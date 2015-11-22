@@ -8,15 +8,18 @@ Celery task monitoring and management on custom admin page
 
 pip install git+git://github.com/baranbartu/djcelery-admin.git --upgrade
 
-**Usage**
+**Installed Apps**
 
-  INSTALLED_APPS = (
-      .
-      .
+    INSTALLED_APPS = (
       'celeryadmin',
-  )
+    )
+    
+**urls.py**
 
-**ENJOY!**
+    url(r'^admin/celery-monitoring/', include('celeryadmin.urls')),
+    url(r'^admin/', include(admin.site.urls)), 
+
+#ENJOY!
 
 visit /admin/celery-monitoring/dashboard/
 
