@@ -2,7 +2,7 @@ __author__ = 'baranbartu'
 
 from django.conf import settings
 from celery.app.control import Control
-from utils import import_object
+from utils import import_object, nested_method
 
 
 class CeleryClient(object):
@@ -66,3 +66,56 @@ class CeleryClient(object):
                     registered_tasks[task] = [worker]
 
         return registered_tasks
+
+    def active_tasks(self):
+        """
+        get active tasks which is running currently
+        :return:
+        """
+        response = self.control.inspect().active()
+        tasks = []
+        for worker, task_list in response.iteritems():
+            for task in task_list:
+                t = dict()
+                t['queue'] = task['delivery_info']['routing_key']
+                t['name'] = task['name']
+                t['id'] = task['id']
+                t['worker'] = worker
+                # todo will be fixed with better way
+                t['started_at'] = task['time_start']
+                tasks.append(t)
+        return tasks
+
+    def reserved_tasks(self):
+        """
+        get reserved tasks which is in queue but still waiting to be executed
+        :return:
+        """
+
+        response = self.control.inspect().reserved()
+        tasks = []
+        for worker, task_list in response.iteritems():
+            for task in task_list:
+                t = dict()
+                t['queue'] = task['delivery_info']['routing_key']
+                t['name'] = task['name']
+                t['id'] = task['id']
+                t['worker'] = worker
+                tasks.append(t)
+        return tasks
+
+    def run(self, operation, parameter):
+
+        def execute(*args):
+            task_verbose = args[1]
+            task = import_object(task_verbose)
+            task.delay()
+
+        def revoke(*args):
+            ctrl = args[0]
+            task_id = args[1]
+            ctrl.revoke(task_id, terminate=True, signal="SIGKILL")
+
+        control = self.control
+        nested = nested_method(self, 'run', operation)
+        return nested(*(control, parameter))

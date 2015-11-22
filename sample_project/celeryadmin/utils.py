@@ -22,3 +22,16 @@ def import_object(object_path):
         return getattr(mod, object_path.split(".")[-1])
     except Exception as detail:
         raise ImportError(detail)
+
+
+def nested_method(clazz, method, nested):
+    from types import CodeType, FunctionType
+    """ Return the function named <child_name> that is defined inside
+        a <parent> function
+        Returns None if nonexistent
+    """
+    parent = getattr(clazz, method)
+    consts = parent.func_code.co_consts
+    for item in consts:
+        if isinstance(item, CodeType) and item.co_name == nested:
+            return FunctionType(item, globals())
