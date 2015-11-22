@@ -16,9 +16,6 @@ pip install git+git://github.com/baranbartu/djcelery-admin.git --upgrade
       'celeryadmin',
   )
 
-  url(r'^admin/celery-monitoring/', include('celeryadmin.urls')),
-  url(r'^admin/', include(admin.site.urls)), 
-
 **ENJOY!**
 
 visit /admin/celery-monitoring/dashboard/
