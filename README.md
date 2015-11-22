@@ -13,7 +13,11 @@ pip install git+git://github.com/baranbartu/djcelery-admin.git --upgrade
 
 # Usage
 
-**Installed Apps**
+**settings.py**
+
+    CELERY_APPLICATION_PATH = 'sample_project.celery.app'
+
+**INSTALLED_APPS**
 
     INSTALLED_APPS = (
       'celeryadmin',
