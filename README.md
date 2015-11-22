@@ -5,7 +5,7 @@ Celery task monitoring and management on custom admin page. You don't need any t
 # Notes
 
 * Module will be in sample_project until end of the project. 
-* celeryadmin can work only rabbitmq, redis and mongodb brokers.
+* celeryadmin can only work for rabbitmq, redis and mongodb brokers.
   
 # Installation 
 
