@@ -3,3 +3,4 @@ whitenoise==1.0.6
 celery
 django-celery
 redis
+flower

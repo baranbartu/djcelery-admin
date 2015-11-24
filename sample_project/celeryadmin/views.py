@@ -1,10 +1,12 @@
 from django.views.generic.base import TemplateView
 from client import CeleryClient
+from context import ContextManager
 
 celery_client = CeleryClient()
+context_manager = ContextManager(celery_client)
 
 
-class ContextBasedTemplateView(TemplateView):
+class DashboardView(TemplateView):
     context = None
 
     def get(self, request, *args, **kwargs):
@@ -13,16 +15,21 @@ class ContextBasedTemplateView(TemplateView):
             parameter = request.GET.get('parameter')
             celery_client.run(operation, parameter)
 
-        return super(ContextBasedTemplateView, self).get(request, *args,
-                                                         **kwargs)
+        return super(DashboardView, self).get(request, *args,
+                                              **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(ContextBasedTemplateView, self).get_context_data(
+        context = super(DashboardView, self).get_context_data(
             **kwargs)
-        context['dashboard'] = get_dashboard_context()
+        context['dashboard'] = context_manager.dashboard
         return context
 
 
-def get_dashboard_context():
-    from contextmanager import ContextManager
-    return ContextManager().dashboard
+class TasksView(TemplateView):
+    context = None
+
+    def get_context_data(self, **kwargs):
+        context = super(TasksView, self).get_context_data(
+            **kwargs)
+        context['tasks'] = context_manager.tasks
+        return context
