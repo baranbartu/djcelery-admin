@@ -1,9 +1,6 @@
 from django.views.generic.base import TemplateView
-from client import CeleryClient
-from context import ContextManager
 
-celery_client = CeleryClient()
-context_manager = ContextManager(celery_client)
+from . import celery_client, context_manager
 
 
 class DashboardView(TemplateView):

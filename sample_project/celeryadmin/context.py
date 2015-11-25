@@ -8,7 +8,7 @@ class ContextManager(object):
     # _dashboard and _tasks are mutable and same object for each instance
     # so one instance will be used on the scope always
     _dashboard = {}
-    _tasks = []
+    _events = []
 
     def __init__(self, client=None):
         self._client = client or CeleryClient()
@@ -22,12 +22,17 @@ class ContextManager(object):
 
     @property
     def tasks(self):
-        return self._tasks
+        _tasks = []
+        for event in self._events:
+            task = {'name': event['name'], 'uuid': event['uuid'],
+                    'state': event['type'].replace('task-', '').upper(),
+                    'args': event['args'], 'kwargs': event['kwargs'],
+                    'received': event['local_received']}
+            _tasks.append(task)
+        return _tasks
 
-    @staticmethod
-    def on_event(event):
-        # todo parse task from event and add to _tasks
-        pass
+    def add_event(self, event):
+        self._events.append(event)
 
     def workers(self):
         return self._client.workers()

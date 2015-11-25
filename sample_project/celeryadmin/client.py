@@ -6,19 +6,22 @@ from utils import import_object, nested_method
 
 
 class CeleryClient(object):
-    application = None
-    control = None
+    _application = None
+    _control = None
 
     def __init__(self):
         path = getattr(settings, 'CELERY_APPLICATION_PATH', None)
         if path is None:
             raise ValueError(
                 'You need to define "CELERY_APPLICATION_PATH" on settings.')
-        self.application = import_object(path)
-        self.control = Control(self.application)
+        self._application = import_object(path)
+        self._control = Control(self._application)
+
+    def get_application(self):
+        return self._application
 
     def workers(self):
-        response = self.control.inspect().stats()
+        response = self._control.inspect().stats()
         statuses = self.worker_statuses()
         workers = []
         for name, info in response.iteritems():
@@ -37,7 +40,7 @@ class CeleryClient(object):
         get worker statuses
         :return:
         """
-        response = self.control.ping()
+        response = self._control.ping()
         workers = {}
         for w in response:
             for k, v in w.iteritems():
@@ -54,7 +57,7 @@ class CeleryClient(object):
         get registered task list
         :return:
         """
-        response = self.control.inspect().registered()
+        response = self._control.inspect().registered()
         registered_tasks = {}
         for worker, tasks in response.iteritems():
             for task in tasks:
@@ -72,7 +75,7 @@ class CeleryClient(object):
         get active tasks which is running currently
         :return:
         """
-        response = self.control.inspect().active()
+        response = self._control.inspect().active()
         tasks = []
         for worker, task_list in response.iteritems():
             for task in task_list:
@@ -92,7 +95,7 @@ class CeleryClient(object):
         :return:
         """
 
-        response = self.control.inspect().reserved()
+        response = self._control.inspect().reserved()
         tasks = []
         for worker, task_list in response.iteritems():
             for task in task_list:
@@ -116,6 +119,6 @@ class CeleryClient(object):
             task_id = args[1]
             ctrl.revoke(task_id, terminate=True, signal="SIGKILL")
 
-        control = self.control
+        control = self._control
         nested = nested_method(self, 'run', operation)
         return nested(*(control, parameter))

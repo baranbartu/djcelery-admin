@@ -14,45 +14,45 @@
                     <thead>
                     <tr>
                         <th scope="col">
-                            Worker
+                            Name
                         </th>
                         <th scope="col">
-                            Status
+                            UUID
                         </th>
                         <th scope="col">
-                            Concurrency
+                            State
                         </th>
                         <th scope="col">
-                            Broker Transport
+                            args
                         </th>
                         <th scope="col">
-                            Broker Hostname
+                            kwargs
                         </th>
                         <th scope="col">
-                            Broker Port
+                            Received
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for worker in dashboard.workers %}
+                    {% for task in tasks %}
                         <tr class="row{{ forloop.counter }}">
                             <td>
-                                {{ worker.name }}
+                                {{ task.name }}
                             </td>
                             <td>
-                                {{ worker.status }}
+                                {{ task.uuid }}
                             </td>
                             <td>
-                                {{ worker.concurrency }}
+                                {{ task.state }}
                             </td>
                             <td>
-                                {{ worker.broker.transport }}
+                                {{ task.args }}
                             </td>
                             <td>
-                                {{ worker.broker.hostname }}
+                                {{ task.kwargs }}
                             </td>
                             <td>
-                                {{ worker.broker.port }}
+                                {{ task.received }}
                             </td>
                         </tr>
                     {% endfor %}
