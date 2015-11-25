@@ -25,5 +25,6 @@ class EventListener(threading.Thread):
             receiver.capture(limit=None, timeout=None, wakeup=True)
 
     def on_event(self, event):
+        print event['type']
         if event['type'].startswith('task-'):
             self.context_manager.add_event(event)
