@@ -31,6 +31,8 @@ pip install git+git://github.com/baranbartu/djcelery-admin.git --upgrade
 #ENJOY!
 
 visit /admin/celery-monitoring/dashboard/
+      
+      /admin/celery-monitoring/tasks/
 
 # Screenshot
 
