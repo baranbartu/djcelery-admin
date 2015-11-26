@@ -36,5 +36,6 @@ pip install git+git://github.com/baranbartu/djcelery-admin.git --upgrade
 
 # Screenshot
 
-    ![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot1.png)
-    ![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot2.png)
+![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot1.png)
+
+![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot2.png)
