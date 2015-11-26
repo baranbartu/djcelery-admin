@@ -34,4 +34,6 @@ visit /admin/celery-monitoring/dashboard/
 
 # Screenshot
 
-![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot.png)
+![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot1.png)
+
+![ScreenShot](https://raw.github.com/baranbartu/djcelery-admin/master/screenshot2.png)

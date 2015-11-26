@@ -10,5 +10,6 @@ app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.update(
     CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
-    BROKER_URL='redis://127.0.0.1:6379/0'
+    BROKER_URL='redis://127.0.0.1:6379/0',
+    CELERY_ENABLE_UTC=True
 )

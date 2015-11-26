@@ -6,5 +6,5 @@ from celery import shared_task
 
 @shared_task
 def test_task():
-    time.sleep(300)
+    time.sleep(20)
     return 'Completed'

@@ -8,7 +8,7 @@ class ContextManager(object):
     # _dashboard and _tasks are mutable and same object for each instance
     # so one instance will be used on the scope always
     _dashboard = {}
-    _events = []
+    _events = {}
 
     def __init__(self, client=None):
         self._client = client or CeleryClient()
@@ -23,32 +23,23 @@ class ContextManager(object):
     @property
     def tasks(self):
         _tasks = []
-        _recevied_tasks = {}
-        for event in self._events:
-            if 'name' in event:
-                task = {'name': event['name'], 'uuid': event['uuid'],
-                        'state': event['type'].replace('task-', '').upper(),
-                        'args': event['args'], 'kwargs': event['kwargs'],
-                        'received': event['local_received']}
-                _recevied_tasks.update({task['uuid']: task})
-
-        _tasks.extend([task for uuid, task in _recevied_tasks.iteritems()])
-
-        for event in self._events:
-            if 'name' not in self._events:
-                task = {
-                    'name': _recevied_tasks[event['uuid']]['name']
-                    if event['uuid'] in _recevied_tasks else None,
-                    'uuid': event['uuid'],
+        for uuid, event in self._events.iteritems():
+            task = {'uuid': uuid, 'name': event.get('name', ''),
                     'state': event['type'].replace('task-', '').upper(),
-                    'args': event['args'], 'kwargs': event['kwargs'],
+                    'args': event.get('args'
+                                      ''), 'kwargs': event.get('kwargs', ''),
                     'received': event['local_received']}
-                _tasks.append(task)
+            _tasks.append(task)
 
         return _tasks
 
     def add_event(self, event):
-        self._events.append(event)
+        if event['uuid'] in self._events:
+            exists = self._events[event['uuid']]
+            event.update(name=exists.get('name', ''))
+            event.update(args=exists.get('args', ''))
+            event.update(kwargs=exists.get('kwargs', ''))
+        self._events.update({event['uuid']: event})
 
     def workers(self):
         return self._client.workers()
@@ -59,3 +50,8 @@ class ContextManager(object):
     def queue_tasks(self):
         return {'active': self._client.active_tasks(),
                 'reserved': self._client.reserved_tasks()}
+
+
+class TaskStatus:
+    RECEIVED = (0, 'received')
+    STARTED = (1, 'started')
