@@ -5,12 +5,14 @@ import threading
 
 
 class EventListener(threading.Thread):
-    def __init__(self, celery_client, context_manager):
+    def __init__(self, celery_client, context_manager, enable_events=False):
         threading.Thread.__init__(self)
         self.daemon = True
 
         self.celery_client = celery_client
         self.context_manager = context_manager
+        if enable_events:
+            self.celery_client.enable_events()
 
     def start(self):
         threading.Thread.start(self)

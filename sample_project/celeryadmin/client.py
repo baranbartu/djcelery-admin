@@ -16,10 +16,15 @@ class CeleryClient(object):
                 'You need to define "CELERY_APPLICATION_PATH" on settings.')
         self._application = import_object(path)
         self._control = Control(self._application)
-        self._control.enable_events()
 
     def get_application(self):
         return self._application
+
+    def enable_events(self):
+        self._control.enable_events()
+
+    def disable_events(self):
+        self._control.disable_events()
 
     def workers(self):
         response = self._control.inspect().stats()
