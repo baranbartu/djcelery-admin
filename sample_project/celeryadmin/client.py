@@ -90,8 +90,6 @@ class CeleryClient(object):
                 t['name'] = task['name']
                 t['id'] = task['id']
                 t['worker'] = worker
-                # todo will be fixed with better way
-                t['started_at'] = task['time_start']
                 tasks.append(t)
         return tasks
 

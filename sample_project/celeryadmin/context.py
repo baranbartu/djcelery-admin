@@ -1,5 +1,6 @@
 __author__ = 'baranbartu'
 
+import datetime
 from client import CeleryClient
 
 
@@ -39,6 +40,8 @@ class ContextManager(object):
             event.update(name=exists.get('name', ''))
             event.update(args=exists.get('args', ''))
             event.update(kwargs=exists.get('kwargs', ''))
+        event['local_received'] = datetime.datetime.fromtimestamp(
+            event['local_received'])
         self._events.update({event['uuid']: event})
 
     def workers(self):
