@@ -5,8 +5,15 @@
     <link rel="stylesheet" type="text/css"
           href="/static/admin/css/changelists.css">
 {% endblock %}
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a>
+        &rsaquo; <a>Celery Monitoring</a>
+        &rsaquo; <a>Tasks</a>
+    </div>
+{% endblock %}
 {% block content %}
-    <h1>Tasks</h1>
+    <h1>Tasks  <a href="{% url 'dashboard' %}"> Go to Dashboard Page </a></h1>
     <div class="content-main">
         <div class='module' id="changelist">
             <div class="results">

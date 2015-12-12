@@ -15,8 +15,17 @@
         }
     </script>
 {% endblock %}
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a>
+        &rsaquo; <a>Celery Monitoring</a>
+        &rsaquo; <a>Dashboard</a>
+    </div>
+{% endblock %}
 {% block content %}
-    <h1>Workers {% if not dashboard.workers %} (There is no active worker) {% endif %}</h1>
+    <h1>Workers {% if not dashboard.workers %} (There is no active
+        worker) {% endif %}  <a href="{% url 'tasks' %}"> Go to Tasks Page </a>
+    </h1>
     <div class="content-main">
         <div class='module' id="changelist">
             <div class="results">
