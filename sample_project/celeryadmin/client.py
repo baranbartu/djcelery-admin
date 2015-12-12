@@ -28,6 +28,8 @@ class CeleryClient(object):
 
     def workers(self):
         response = self._control.inspect().stats()
+        if not response:
+            return []
         statuses = self.worker_statuses()
         workers = []
         for name, info in response.iteritems():
