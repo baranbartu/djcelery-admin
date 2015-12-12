@@ -16,7 +16,7 @@
     </script>
 {% endblock %}
 {% block content %}
-    <h1>Workers</h1>
+    <h1>Workers {% if not dashboard.workers %} (There is no active worker) {% endif %}</h1>
     <div class="content-main">
         <div class='module' id="changelist">
             <div class="results">

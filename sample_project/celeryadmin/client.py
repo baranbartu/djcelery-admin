@@ -66,6 +66,8 @@ class CeleryClient(object):
         :return:
         """
         response = self._control.inspect().registered()
+        if not response:
+            return []
         registered_tasks = {}
         for worker, tasks in response.iteritems():
             for task in tasks:
@@ -84,6 +86,8 @@ class CeleryClient(object):
         :return:
         """
         response = self._control.inspect().active()
+        if not response:
+            return []
         tasks = []
         for worker, task_list in response.iteritems():
             for task in task_list:
@@ -102,6 +106,8 @@ class CeleryClient(object):
         """
 
         response = self._control.inspect().reserved()
+        if not response:
+            return []
         tasks = []
         for worker, task_list in response.iteritems():
             for task in task_list:
