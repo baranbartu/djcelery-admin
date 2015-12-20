@@ -18,5 +18,5 @@ setup(
                                   'templates/dashboard/tasks.html']},
     include_package_data=True,
     url='http://github.com/baranbartu/djcelery-admin',
-    install_requires=['django>=1.6', 'celery', 'django-celery']
+    install_requires=['django-celery']
 )
