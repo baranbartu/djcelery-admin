@@ -119,7 +119,7 @@ class CeleryClient(object):
                 tasks.append(t)
         return tasks
 
-    def run(self, operation, parameter):
+    def run(self, command, parameter):
 
         def execute(*args):
             task_verbose = args[1]
@@ -132,5 +132,5 @@ class CeleryClient(object):
             ctrl.revoke(task_id, terminate=True, signal="SIGKILL")
 
         control = self._control
-        nested = nested_method(self, 'run', operation)
+        nested = nested_method(self, 'run', command)
         return nested(*(control, parameter))

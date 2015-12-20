@@ -1,4 +1,5 @@
 from django.views.generic.base import TemplateView
+from django.shortcuts import redirect
 
 from . import celery_client, context_manager
 
@@ -30,3 +31,13 @@ class TasksView(TemplateView):
             **kwargs)
         context['tasks'] = context_manager.tasks
         return context
+
+
+# todo find a better way for operations, temporary solution
+class OperationsRedirectView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('command'):
+            command = request.GET.get('command')
+            parameter = request.GET.get('parameter')
+            celery_client.run(command, parameter)
+            return redirect('dashboard')

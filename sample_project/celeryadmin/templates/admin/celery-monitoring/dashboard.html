@@ -5,9 +5,9 @@
     <link rel="stylesheet" type="text/css"
           href="/static/admin/css/changelists.css">
     <script>
-        function run(operation, parameter) {
-            var url = "{% url 'dashboard' %}";
-            url += "?operation=" + operation + "&parameter=" + parameter;
+        function run(command, parameter) {
+            var url = "{% url 'operations' %}";
+            url += "?command=" + command + "&parameter=" + parameter;
             var a = document.createElement('a');
             a.href = url;
             document.body.appendChild(a);
