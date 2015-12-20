@@ -10,6 +10,8 @@ class ContextManager(object):
     # so one instance will be used on the scope always
     _dashboard = {}
     _events = {}
+    # todo find a better way to define this field
+    EVENT_SIZE_THRESHOLD = 100
 
     def __init__(self, client=None):
         self._client = client or CeleryClient()
@@ -35,6 +37,9 @@ class ContextManager(object):
         return _tasks
 
     def add_event(self, event):
+        if len(self._events) == self.EVENT_SIZE_THRESHOLD:
+            self._events.pop(0)
+
         if event['uuid'] in self._events:
             exists = self._events[event['uuid']]
             event.update(name=exists.get('name', ''))
