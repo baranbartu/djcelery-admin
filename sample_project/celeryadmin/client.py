@@ -8,6 +8,7 @@ from utils import import_object, nested_method
 class CeleryClient(object):
     _application = None
     _control = None
+    _default_queue = None
 
     def __init__(self):
         path = getattr(settings, 'CELERY_APPLICATION_PATH', None)
@@ -16,9 +17,15 @@ class CeleryClient(object):
                 'You need to define "CELERY_APPLICATION_PATH" on settings.')
         self._application = import_object(path)
         self._control = Control(self._application)
+        self._default_queue = self._application.amqp.default_queue.name
 
-    def get_application(self):
+    @property
+    def application(self):
         return self._application
+
+    @property
+    def default_queue(self):
+        return self._default_queue
 
     def enable_events(self):
         self._control.enable_events()
@@ -31,6 +38,7 @@ class CeleryClient(object):
         if not response:
             return []
         statuses = self.worker_statuses()
+        queues = self.active_queues()
         workers = []
         for name, info in response.iteritems():
             worker = dict()
@@ -40,6 +48,7 @@ class CeleryClient(object):
             worker['broker'] = {'transport': info['broker']['transport'],
                                 'hostname': info['broker']['hostname'],
                                 'port': info['broker']['port']}
+            worker['queues'] = queues[worker['name']]
             workers.append(worker)
         return workers
 
@@ -49,6 +58,8 @@ class CeleryClient(object):
         :return:
         """
         response = self._control.ping()
+        if not response:
+            return []
         workers = {}
         for w in response:
             for k, v in w.iteritems():
@@ -58,6 +69,22 @@ class CeleryClient(object):
                     else:
                         workers[k] = 'Passive'
                     break
+        return workers
+
+    def active_queues(self):
+        """
+
+        get queue mappings with workers
+        :return:
+        """
+        response = self._control.inspect().active_queues()
+        if not response:
+            return []
+        workers = {}
+        for w, queues in response.iteritems():
+            workers[w] = list()
+            for q in queues:
+                workers[w].append(q['name'])
         return workers
 
     def registered_tasks(self):
@@ -79,6 +106,9 @@ class CeleryClient(object):
                     registered_tasks[task] = [worker]
 
         return registered_tasks
+
+    # queue = self.application._tasks.get(tasks_verbose)._exec_options['queue']
+
 
     def active_tasks(self):
         """
@@ -119,9 +149,9 @@ class CeleryClient(object):
                 tasks.append(t)
         return tasks
 
-    def run(self, command, parameter):
+    def execute(self, command, parameter):
 
-        def execute(*args):
+        def run(*args):
             task_verbose = args[1]
             task = import_object(task_verbose)
             task.delay()
@@ -132,5 +162,5 @@ class CeleryClient(object):
             ctrl.revoke(task_id, terminate=True, signal="SIGKILL")
 
         control = self._control
-        nested = nested_method(self, 'run', command)
+        nested = nested_method(self, 'execute', command)
         return nested(*(control, parameter))

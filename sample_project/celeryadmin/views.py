@@ -7,15 +7,6 @@ from . import celery_client, context_manager
 class DashboardView(TemplateView):
     context = None
 
-    def get(self, request, *args, **kwargs):
-        if request.GET.get('operation'):
-            operation = request.GET.get('operation')
-            parameter = request.GET.get('parameter')
-            celery_client.run(operation, parameter)
-
-        return super(DashboardView, self).get(request, *args,
-                                              **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(
             **kwargs)
@@ -39,5 +30,5 @@ class OperationsRedirectView(TemplateView):
         if request.GET.get('command'):
             command = request.GET.get('command')
             parameter = request.GET.get('parameter')
-            celery_client.run(command, parameter)
+            celery_client.execute(command, parameter)
             return redirect('dashboard')
