@@ -27,7 +27,7 @@ class EventListener(threading.Thread):
             ready = True
             if self.enable_events:
                 self.celery_client.enable_events()
-            application = self.celery_client.application()
+            application = self.celery_client.application
             with application.connection() as conn:
                 receiver = EventReceiver(conn,
                                          handlers={"*": self.on_event},

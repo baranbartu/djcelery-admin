@@ -18,6 +18,7 @@ class CeleryClient(object):
         self._application = import_object(path)
         self._control = Control(self._application)
         self._default_queue = self._application.amqp.default_queue.name
+        self._routes = getattr(settings, 'CELERY_ROUTES', {})
 
     @property
     def application(self):
@@ -26,6 +27,10 @@ class CeleryClient(object):
     @property
     def default_queue(self):
         return self._default_queue
+
+    @property
+    def routes(self):
+        return self._routes
 
     def enable_events(self):
         self._control.enable_events()
@@ -95,20 +100,19 @@ class CeleryClient(object):
         response = self._control.inspect().registered()
         if not response:
             return []
-        registered_tasks = {}
+        all_tasks = set()
         for worker, tasks in response.iteritems():
             for task in tasks:
-                if task in registered_tasks:
-                    exists = registered_tasks[task]
-                    exists.append(worker)
-                    registered_tasks[task] = list(set(exists))
-                else:
-                    registered_tasks[task] = [worker]
+                all_tasks.add(task)
 
+        registered_tasks = {}
+        for task in all_tasks:
+            if task in self.routes:
+                queue = self.routes[task].get('queue', self.default_queue)
+            else:
+                queue = self.default_queue
+            registered_tasks[task] = queue
         return registered_tasks
-
-    # queue = self.application._tasks.get(tasks_verbose)._exec_options['queue']
-
 
     def active_tasks(self):
         """
