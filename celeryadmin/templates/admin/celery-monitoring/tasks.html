@@ -1,0 +1,74 @@
+{% extends 'admin/base_site.html' %}
+{% block title %}Celery Monitoring Page | Tasks{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css"
+          href="/static/admin/css/changelists.css">
+{% endblock %}
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a>
+        &rsaquo; <a>Celery Monitoring</a>
+        &rsaquo; <a>Tasks</a>
+    </div>
+{% endblock %}
+{% block content %}
+    <h1>Tasks  <a href="{% url 'dashboard' %}"> Go to Dashboard Page </a></h1>
+    <div class="content-main">
+        <div class='module' id="changelist">
+            <div class="results">
+                <table id="result_list" summary='Celery Tasks Events'>
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            Name
+                        </th>
+                        <th scope="col">
+                            UUID
+                        </th>
+                        <th scope="col">
+                            State
+                        </th>
+                        <th scope="col">
+                            args
+                        </th>
+                        <th scope="col">
+                            kwargs
+                        </th>
+                        <th scope="col">
+                            Received
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr class="row{{ forloop.counter }}">
+                            <td>
+                                {{ task.name }}
+                            </td>
+                            <td>
+                                {{ task.uuid }}
+                            </td>
+                            <td>
+                                {{ task.state }}
+                            </td>
+                            <td>
+                                {{ task.args }}
+                            </td>
+                            <td>
+                                {{ task.kwargs }}
+                            </td>
+                            <td>
+                                {{ task.received }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
